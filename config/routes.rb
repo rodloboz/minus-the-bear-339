@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
+  mount StripeEvent::Engine, at: '/stripe-webhooks'
+
   devise_for :users
-  root to: 'pages#home'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  root to: 'teddies#index'
+
+  resources :teddies, only: :show
+
+  resources :orders, only: %i[show create] do
+    resources :payments, only: :new
+  end
 end
